@@ -1,0 +1,24 @@
+{
+  "name": "proyecto-backend-1",
+  "version": "1.0.0",
+  "description": "Proyecto Final de Backend 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuimeyMoreno/Proyecto-Backend-1.git"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/QuimeyMoreno/Proyecto-Backend-1/issues"
+  },
+  "homepage": "https://github.com/QuimeyMoreno/Proyecto-Backend-1#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
