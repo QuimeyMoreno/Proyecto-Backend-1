@@ -23,12 +23,13 @@ router.get('/', async (req, res) =>{
         
     } catch (error) {
         console.log(error);
+        res.status(500).send({ status: 'error', mensaje: 'Error interno del servidor' });
     }
 })
 
 router.get('/:pid', async (req, res) =>{
     try {
-        const id = Number(req.params.pid);
+        const id = req.params.pid;
         const productsDb = await productsManagerFs.getProducts();
         const product = productsDb.find(product => product.id === id);
 
@@ -38,26 +39,48 @@ router.get('/:pid', async (req, res) =>{
         res.send({status: 'success', data: product});
     } catch (error) {
         console.log(error)
+        res.status(500).send({ status: 'error', mensaje: 'Error interno del servidor' });
     }
 })
 
 
-router.post('/', async (req, res) =>{
+router.post('/', async (req, res) => {
     try {
-        const { body } = req;
-        const response = await productsManagerFs.createProducts(body);
-        res.send({status:'succes', data: response})        
+        const { title, description, code, price, status, stock, thumbnails } = req.body;
+
+        if (!title || !description || !code || !price || status === undefined || !stock || thumbnails === undefined) {
+            return res.status(400).send({ status: 'error', mensaje: 'Faltan parámetros obligatorios' });
+        }
+
+        const productsDb = await productsManagerFs.getProducts();
+        const existingProduct = productsDb.find(product => product.code === code);
+
+        if (existingProduct) {
+            return res.status(400).send({ status: 'error', mensaje: 'El código de producto ya está en uso' });
+        }
+
+        const newProduct = { title, description, code, price, status, stock, thumbnails };
+        const response = await productsManagerFs.createProducts(newProduct);
+
+        res.send({ status: 'success', data: response });
+
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        res.status(500).send({ status: 'error', mensaje: 'Error interno del servidor' });
     }
-})
+});
+
+
 
 router.put('/:pid', async (req, res) => {
     try {
-        const id = Number(req.params.pid);
-
+        const id = req.params.pid;
         const { id: _, ...updateFields } = req.body;
-        
+
+        if (Object.keys(updateFields).length === 0) {
+            return res.status(400).send({ status: 'error', mensaje: 'No se proporcionaron campos para actualizar' });
+        }
+
         const response = await productsManagerFs.updateProduct(id, updateFields);
 
         if (response) {
@@ -71,9 +94,10 @@ router.put('/:pid', async (req, res) => {
     }
 });
 
+
 router.delete('/:pid', async (req, res) =>{
        try {
-        const id = Number(req.params.pid);
+        const id = req.params.pid;
         const updateFields = req.body;
 
         if (updateFields.id) {
@@ -86,8 +110,9 @@ router.delete('/:pid', async (req, res) =>{
         } else {
             res.status(404).send({ status: 'error', mensaje: 'Producto no encontrado' });
         }
+        
        } catch (error) {
-        console.log(error)
+        res.status(500).send({ status: 'error', mensaje: 'Error interno del servidor' });
        } 
 })
 
