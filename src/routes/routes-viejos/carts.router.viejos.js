@@ -1,3 +1,16 @@
+/*
+****************
+****************
+LOS DEJO COMO APUNTES, LOS QUE ESTAN CORRECTAMENTE SON LOS QUE ESTAN DENTRO DE LA CARPETA API
+****************
+****************
+
+
+
+
+
+
+
 import { Router } from 'express'
 import CartManagerFs from '../managers/FileSystem/carts.manager.js';
 
@@ -52,3 +65,5 @@ router.post('/:cid/product/:pid', async (req, res) => {
 
 
 export default router;
+
+*/

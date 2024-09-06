@@ -1,3 +1,7 @@
+/*
+
+ME LO GUARDO COMO APUNTE
+
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 const path = './dbjson/productsDb.json';
@@ -85,3 +89,5 @@ class ProductsManagerFs{
 }
 
 export default ProductsManagerFs;
+
+*/

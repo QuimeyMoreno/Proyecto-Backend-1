@@ -1,25 +1,26 @@
 import { Router } from "express";
-import fs from 'fs/promises'; 
 import { __dirname } from '../utils/dirname.js'; 
+import ProductManagerMongo from "../daos/MONGO/productsManager.mongo.js";
 
 const router = Router();
+const productService = new ProductManagerMongo();
 
 router.get('/', async (req, res) => {
+    const { page = 1, limit = 3 } = req.query;  
     try {
-        
-        const data = await fs.readFile(`${__dirname}/../../dbjson/productsDb.json`, 'utf-8');
-        const products = JSON.parse(data);
+        const products = await productService.getProducts({
+            limit: parseInt(limit),
+            page: parseInt(page)
+        });
 
-        const userLogin = {
-            full_name: 'Quimey Moreno',
-            role: 'admin'
-        };
-
-        res.render('home', {
-            name: "Quimey",
-            title: "HOME - Ecomerce",
-            products, 
-            isAdmin: userLogin.role === 'admin'
+        res.render("home", {
+            products,  
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            totalPages: products.totalPages
         });
     } catch (error) {
         console.error('Error al leer los productos:', error);
@@ -27,10 +28,12 @@ router.get('/', async (req, res) => {
     }
 });
 
-
 router.get('/realtimeproducts', async (req, res) =>{
     res.render('realTimeProducts', {
         
     })
 })
+
+
+
 export default router;

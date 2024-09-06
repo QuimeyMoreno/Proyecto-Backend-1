@@ -1,3 +1,7 @@
+/*
+ME LO GUARDO COMO APUNTE. 
+
+
 import fs from 'fs'
 const path = './dbjson/cartsDb.json'
 
@@ -93,3 +97,6 @@ class CartManagerFs {
 
 
 export default CartManagerFs;
+
+*/
+

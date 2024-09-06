@@ -6,6 +6,7 @@ socket.on('updateProducts', (products) => {
     const productsList = document.getElementById('productsList');
     productsList.innerHTML = ''; 
 
+    
     products.forEach(product => {
         const li = document.createElement('li');
         li.textContent = `${product.title} - ${product.price}`;
@@ -14,13 +15,14 @@ socket.on('updateProducts', (products) => {
         deleteButton.textContent = 'Eliminar';
         deleteButton.style.marginLeft = '10px'; 
         deleteButton.onclick = () => {
-            socket.emit('deleteProduct', product.id);
+            socket.emit('deleteProduct', product._id);  
         };
 
         li.appendChild(deleteButton);
         productsList.appendChild(li);
     });
 });
+
 
 document.getElementById('productForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -32,8 +34,7 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
         price: parseFloat(document.getElementById('price').value),
         stock: parseInt(document.getElementById('stock').value),
         status: true,
-        thumbnails: "",
-        id: ""
+        thumbnails: "", 
     };
 
     socket.emit('createProduct', newProduct);

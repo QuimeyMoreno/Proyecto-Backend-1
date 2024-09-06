@@ -1,3 +1,12 @@
+/*
+****************
+****************
+LOS DEJO COMO APUNTES, LOS QUE ESTAN CORRECTAMENTE SON LOS QUE ESTAN DENTRO DE LA CARPETA API
+****************
+****************
+
+
+
 import { Router } from "express";   
 import ProductsManagerFs from "../managers/FileSystem/products.manager.js";
 
@@ -6,26 +15,26 @@ const router = Router();
 
 const productsManagerFs = new ProductsManagerFs();
 
-router.get('/', async (req, res) =>{
-    try {
-        const limit = req.query.limit;
-        const productsDb = await productsManagerFs.getProducts();
+// router.get('/', async (req, res) =>{
+//     try {
+//         const limit = req.query.limit;
+//         const productsDb = await productsManagerFs.getProducts();
 
-        if(!limit){
-            return res.send({status:'succes', data:productsDb});
-        }
-        if(isNaN(limit)){
-            return res.send({status:'succes', data:productsDb});
-        }
+//         if(!limit){
+//             return res.send({status:'succes', data:productsDb});
+//         }
+//         if(isNaN(limit)){
+//             return res.send({status:'succes', data:productsDb});
+//         }
 
-        const productsLimit = productsDb.slice(0,limit);
-        res.send({status:'succes', data: productsLimit})
+//         const productsLimit = productsDb.slice(0,limit);
+//         res.send({status:'succes', data: productsLimit})
         
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({ status: 'error', mensaje: 'Error interno del servidor' });
-    }
-})
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).send({ status: 'error', mensaje: 'Error interno del servidor' });
+//     }
+// })
 
 router.get('/:pid', async (req, res) =>{
     try {
@@ -117,3 +126,9 @@ router.delete('/:pid', async (req, res) =>{
 })
 
 export default router;
+
+
+
+
+
+*/
