@@ -2,11 +2,16 @@ import express from 'express';
 import productRouter from './routes/api/products.router.js'
 import cartRouter from './routes/api/carts.router.js'
 import viewsRouter from "./routes/views.router.js";
+import userRouter from "./routes/api/session.router.js"
 import handlebars from 'express-handlebars';
 import { __dirname } from './utils/dirname.js';
 import { Server } from 'socket.io';
 import { connectDB } from './config/index.js';
 import ProductManagerMongo from './daos/MONGO/productsManager.mongo.js';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
+import initializePassport from './utils/passport.config.js';
+
 
 const app = express();
 const PORT = 8080;
@@ -18,6 +23,13 @@ const httpServer = app.listen(PORT, () => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(__dirname + '/../public'));
+//cookie
+app.use(cookieParser('palabrasecreta'))
+//pasport-jwt
+
+initializePassport();
+app.use(passport.initialize())
+
 connectDB();
 
 
@@ -32,9 +44,11 @@ app.set('views', __dirname + '/../views');
 app.set('view engine', 'handlebars')
 
 
+//Rutas
 app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/sessions', userRouter);
 
 
 

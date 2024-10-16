@@ -8,6 +8,13 @@ const router = Router();
 const productService = new ProductManagerMongo();
 const cartService = new CartManagerMongo();
 
+router.get('/login', (req, res) => {
+    res.status(200).render('login', {})
+})
+router.get('/register', (req, res) => {
+    res.status(200).render('register', {})
+})
+
 router.get('/', async (req, res) => {
     const { page = 1, limit = 3 } = req.query;  
     try {
