@@ -6,7 +6,7 @@ import userRouter from "./routes/api/session.router.js"
 import handlebars from 'express-handlebars';
 import { __dirname } from './utils/dirname.js';
 import { Server } from 'socket.io';
-import { connectDB, configObject } from './config/index.js';
+import { connectDB } from './config/index.js';
 import ProductManagerMongo from './daos/MONGO/productsManager.mongo.js';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
@@ -14,7 +14,7 @@ import initializePassport from './middleware/passport.config.js';
 
 
 const app = express();
-const PORT = configObject.port;
+const PORT = 8080;
 
 const httpServer = app.listen(PORT, () => {
     console.log('escuchando en el puerto: ', PORT)
@@ -57,38 +57,56 @@ const productService = new ProductManagerMongo();
 const io = new Server(httpServer)
 
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
     console.log("Cliente conectado");
 
     socket.on('getProducts', async () => {
         try {
             const products = await productService.get();
-            socket.emit('updateProducts', products);
+            socket.emit('updateProducts', products.docs || products);
         } catch (error) {
             console.error('Error al obtener productos:', error);
         }
     });
 
-    socket.on('createProduct', async (newProduct) => {
+    socket.on('createProduct', async (newProduct, userRole) => {
+        if (!userRole || userRole !== 'admin') {
+            return socket.emit('errorMessage', 'No tienes permiso para crear productos');
+        }
         try {
-            await productService.create(newProduct); 
-            const updatedProducts = await productService.get(); 
-            io.emit('updateProducts', updatedProducts);
+            await productService.create(newProduct);
+            const updatedProducts = await productService.get();
+            io.emit('updateProducts', updatedProducts.docs || updatedProducts);
         } catch (error) {
             console.error('Error al crear el producto:', error);
         }
     });
 
-    socket.on('deleteProduct', async (productId) => {
+    socket.on('updateProduct', async (productId, updateFields, userRole) => {
+        if (!userRole || userRole !== 'admin') {
+            return socket.emit('errorMessage', 'No tienes permiso para actualizar productos');
+        }
         try {
-            await productService.delete(productId); 
+            await productService.update(productId, updateFields);
             const updatedProducts = await productService.get();
-            io.emit('updateProducts', updatedProducts);
+            io.emit('updateProducts', updatedProducts.docs || updatedProducts);
+        } catch (error) {
+            console.error('Error al actualizar el producto:', error);
+        }
+    });
+
+    socket.on('deleteProduct', async (productId, userRole) => {
+        if (!userRole || userRole !== 'admin') {
+            return socket.emit('errorMessage', 'No tienes permiso para eliminar productos');
+        }
+        try {
+            await productService.delete(productId);
+            const updatedProducts = await productService.get();
+            io.emit('updateProducts', updatedProducts.docs || updatedProducts);
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
         }
     });
 });
-
 
 

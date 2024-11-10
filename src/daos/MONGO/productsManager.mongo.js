@@ -76,7 +76,7 @@ class ProductManagerMongo {
         }
     }
 
-    updadte = async (id, updateFields) =>{
+    update = async (id, updateFields) =>{
         try {
             const update = await this.model.findByIdAndUpdate(id, updateFields);
 

@@ -1,6 +1,7 @@
 import services from "../services/index.js";
 import { createHash, isValidPassword } from "../utils/hash.js";
 import { generateToken } from "../utils/jwt.js";
+import UserDto from "../dto/user.dto.js";
 
 const { userService } = services;
 
@@ -51,6 +52,9 @@ class UserController {
             
         const token = generateToken({
             id: userFound._id,
+            first_name: userFound.first_name,
+            last_name: userFound.last_name,
+            email: userFound.email,
             role: userFound.role === 'admin'
         })
         res.cookie('token', token,{
@@ -62,6 +66,17 @@ class UserController {
             token
         })
     }
+
+    currentDto = (req, res) => {
+        try {
+          const user = req.user; 
+          const userDTO = new UserDto(user); 
+          res.status(200).json(userDTO);
+        } catch (error) {
+          res.status(500).json({ message: 'Error al obtener el usuario' });
+        }
+      }
 }
 
 export default UserController;
+

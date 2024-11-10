@@ -17,16 +17,16 @@ const initializePassport = () => {
         return token;
     }
     
-   passport.use('jwt', new JWTStrategy({
-    jwtFromRequest:ExtractJWT.fromExtractors([cookeExtractor]),
-    secretOrKey:PRIVATE_KEY
-   }, async (jwt_payload, done) =>{
+    passport.use('jwt', new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromExtractors([cookeExtractor]),
+        secretOrKey: PRIVATE_KEY
+    }, async (jwt_payload, done) => {
         try {
             return done(null, jwt_payload);
         } catch (error) {
-            return done(error)
+            return done(error);
         }
-   }))
+    }));
 
 
 }

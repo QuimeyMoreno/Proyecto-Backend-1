@@ -1,27 +1,22 @@
-import { connect } from "mongoose";
-import dotenv from 'dotenv';
+// import { connect } from "mongoose"
 
-dotenv.config();
 
-console.log('Mongo URL:', process.env.MONGO_URL); // Esto debe mostrar la URL de conexión
+// class MongoSingleton {
+//     static #instance
+//     constructor(){
+//         connect('mongodb+srv://quimeymoreno00:WPpvuyXGegmP4UBV@cluster0.zzm2z.mongodb.net/ProyectoFinal?retryWrites=true&w=majority&appName=Cluster0')
+//     }
 
-class MongoSingleton {
-    static #instance;
+//     static getInstance(){
+//         if(this.#instance){
+//             console.log('base de datos ya conectada')
+//             return this.#instance
+//         }
+//         this.#instance = new MongoSingleton()
+//         console.log('base de datos conectada')
+//         return this.#instance
+//     }
+// }
 
-    constructor() {
-        connect(process.env.MONGO_URL)
-            .then(() => console.log('Conexión a la base de datos exitosa'))
-            .catch(error => console.error('Error al conectar la base de datos:', error));
-    }
+// export default MongoSingleton;
 
-    static getInstance() {
-        if (this.#instance) {
-            console.log('Base de datos ya conectada');
-            return this.#instance;
-        }
-        this.#instance = new MongoSingleton();
-        return this.#instance;
-    }
-}
-
-export default MongoSingleton;
