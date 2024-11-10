@@ -6,15 +6,15 @@ import userRouter from "./routes/api/session.router.js"
 import handlebars from 'express-handlebars';
 import { __dirname } from './utils/dirname.js';
 import { Server } from 'socket.io';
-import { connectDB } from './config/index.js';
+import { connectDB, configObject } from './config/index.js';
 import ProductManagerMongo from './daos/MONGO/productsManager.mongo.js';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
-import initializePassport from './utils/passport.config.js';
+import initializePassport from './middleware/passport.config.js';
 
 
 const app = express();
-const PORT = 8080;
+const PORT = configObject.port;
 
 const httpServer = app.listen(PORT, () => {
     console.log('escuchando en el puerto: ', PORT)
@@ -31,7 +31,6 @@ initializePassport();
 app.use(passport.initialize())
 
 connectDB();
-
 
 
 app.engine('handlebars', handlebars.engine({
@@ -63,7 +62,7 @@ io.on('connection', socket => {
 
     socket.on('getProducts', async () => {
         try {
-            const products = await productService.getProducts();
+            const products = await productService.get();
             socket.emit('updateProducts', products);
         } catch (error) {
             console.error('Error al obtener productos:', error);
@@ -72,8 +71,8 @@ io.on('connection', socket => {
 
     socket.on('createProduct', async (newProduct) => {
         try {
-            await productService.createProduct(newProduct); 
-            const updatedProducts = await productService.getProducts(); 
+            await productService.create(newProduct); 
+            const updatedProducts = await productService.get(); 
             io.emit('updateProducts', updatedProducts);
         } catch (error) {
             console.error('Error al crear el producto:', error);
@@ -82,8 +81,8 @@ io.on('connection', socket => {
 
     socket.on('deleteProduct', async (productId) => {
         try {
-            await productService.deleteProduct(productId); 
-            const updatedProducts = await productService.getProducts();
+            await productService.delete(productId); 
+            const updatedProducts = await productService.get();
             io.emit('updateProducts', updatedProducts);
         } catch (error) {
             console.error('Error al eliminar el producto:', error);

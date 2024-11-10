@@ -6,7 +6,7 @@ class ProductManagerMongo {
     }
 
 
-    getProducts = async ({ filter = {}, limit = 10, page = 1, sortOption = {} } = {}) => {
+    get = async ({ filter = {}, limit = 10, page = 1, sortOption = {} } = {}) => {
         try {
             const options = {
                 page,
@@ -26,7 +26,7 @@ class ProductManagerMongo {
     
 
 
-    getProductById = async (id) =>{
+    getBy = async (id) =>{
         try {
             const foundProduct = await this.model.findById(id);
 
@@ -42,7 +42,7 @@ class ProductManagerMongo {
         }
     }
 
-    createProduct = async ({title, description, price, code, stock, status, thumbnails }) => {
+    create = async ({title, description, price, code, stock, status, thumbnails }) => {
         try {
             if(!title || !description || !price || !code || !stock || !status){
                 console.log("Debe completar todos los campos!");
@@ -76,7 +76,7 @@ class ProductManagerMongo {
         }
     }
 
-    updateProduct = async (id, updateFields) =>{
+    updadte = async (id, updateFields) =>{
         try {
             const update = await this.model.findByIdAndUpdate(id, updateFields);
 
@@ -92,7 +92,7 @@ class ProductManagerMongo {
         }
     }
 
-    deleteProduct = async (id) =>{
+    delete = async (id) =>{
         try {
             const deleteProduct = await this.model.findByIdAndDelete(id);
 

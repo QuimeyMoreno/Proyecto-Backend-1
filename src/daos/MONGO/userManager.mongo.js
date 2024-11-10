@@ -6,20 +6,18 @@ class UserDaoMongo{
         this.model = userModel;
     }
 
-    async getUsers(){
+    async get(){
         return await this.model.find({})           
     }
 
-    async getUser(filter){
+    async getBy(filter){
         return await this.model.findOne(filter)
     }
 
-    async createUser(newUser){
+    async create(newUser){
         return await this.model.create(newUser)
     }
 
-    async updateUser(uid){}
-    async deleteUser(uid){}
 }
 
 export default UserDaoMongo;

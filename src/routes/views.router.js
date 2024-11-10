@@ -18,7 +18,7 @@ router.get('/register', (req, res) => {
 router.get('/', async (req, res) => {
     const { page = 1, limit = 3 } = req.query;  
     try {
-        const products = await productService.getProducts({
+        const products = await productService.get({
             limit: parseInt(limit),
             page: parseInt(page)
         });

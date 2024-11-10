@@ -5,7 +5,7 @@ class CartManager{
         this.model = cartModel;
     }
 
-    createCart = async () => {
+    create = async () => {
         try {
             const newCart = new this.model({ products: [] });
             await newCart.save();
@@ -15,7 +15,7 @@ class CartManager{
         }
     }
 
-    getCartById = async (cartId) => {
+    getBy = async (cartId) => {
         try {
             const cart = await this.model.findById(cartId).populate('products.product');
             if (!cart) {
@@ -31,7 +31,7 @@ class CartManager{
 
     createProductToCart = async (cartId, productId, quantity = 1) => {
         try {
-            const cart = await this.getCartById(cartId);
+            const cart = await this.getBy(cartId);
             const productExists = cart.products.find(p => p.product.toString() === productId)
 
             if (productExists) {
@@ -51,7 +51,7 @@ class CartManager{
 
     deleteProductFromCart = async (cartId, productId) => {
         try {
-            const cart = await this.getCartById(cartId);
+            const cart = await this.getBy(cartId);
             if (!cart) {
                 return null;  
             }
@@ -65,9 +65,9 @@ class CartManager{
         }
     }
 
-    updateCart = async (cartId, productsArray) => {
+    update = async (cartId, productsArray) => {
         try {
-            const cart = await this.getCartById(cartId);
+            const cart = await this.getBy(cartId);
             if (!cart) {
                 return null;  
             }
@@ -84,7 +84,7 @@ class CartManager{
 
     updateProductQuantity = async (cartId, productId, newQuantity) => {
         try {
-            const cart = await this.getCartById(cartId);
+            const cart = await this.getBy(cartId);
             if (!cart) {
                 return null;  
             }
@@ -106,7 +106,7 @@ class CartManager{
 
     deleteAllProductsFromCart = async (cartId) => {
         try {
-            const cart = await this.getCartById(cartId);
+            const cart = await this.getBy(cartId);
             if (!cart) {
                 return null;  
             }
