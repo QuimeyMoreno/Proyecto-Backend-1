@@ -121,6 +121,8 @@ class CartsController {
             res.status(500).send({ status: 'error', mensaje: 'Error interno del servidor' });
         }
     }
+
+    
 }
 
 export default CartsController;

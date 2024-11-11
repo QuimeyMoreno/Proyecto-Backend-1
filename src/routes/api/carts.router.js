@@ -11,7 +11,8 @@ const {
     deleteProductFromCart,
     updateCart,
     updateProductQuantity,
-    deleteAllProductsFromCart
+    deleteAllProductsFromCart,
+    finalizePurchase
 } = new CartsController()
 
 
@@ -29,5 +30,6 @@ router.put('/:cid/products/:pid', updateProductQuantity);
 
 router.delete('/:cid', deleteAllProductsFromCart);
 
+router.post('/:cid/purchase', finalizePurchase);
 
 export default router;

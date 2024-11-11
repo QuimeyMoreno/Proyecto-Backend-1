@@ -28,7 +28,8 @@ class UserController {
             first_name,
             last_name, 
             email,
-            password: createHash(password) 
+            password: createHash(password),
+            role: 'admin'
         }
     
         let result = await this.service.createUser(newUser);
@@ -55,7 +56,7 @@ class UserController {
             first_name: userFound.first_name,
             last_name: userFound.last_name,
             email: userFound.email,
-            role: userFound.role === 'admin'
+            role: userFound.role 
         })
         res.cookie('token', token,{
             maxAge: 1000 * 60 * 60 * 24,
@@ -80,3 +81,32 @@ class UserController {
 
 export default UserController;
 
+
+
+
+
+/////////////////////////
+
+
+
+import { Router } from "express";
+import passportCall from "../../middleware/passportCall.js";
+import UserController from "../../controllers/users.controller.js";
+
+const router = Router();
+
+const {
+    registerUser,
+    loginUser,
+    currentDto
+} = new UserController()
+
+router.post('/register', registerUser)
+
+
+router.post('/login', loginUser)
+
+router.get('/current', passportCall('jwt'), currentDto)
+
+
+export default router;
