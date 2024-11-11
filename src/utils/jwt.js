@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export const PRIVATE_KEY = 'ProyectoFinalSecretpara-lafirma'
+export const PRIVATE_KEY = process.env.PRIVATE_KEY
 
 export const generateToken = user => jwt.sign(user, PRIVATE_KEY, {expiresIn: '1h'});
 
