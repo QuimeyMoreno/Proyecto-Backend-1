@@ -8,7 +8,7 @@ const router = Router();
 const {
     registerUser,
     loginUser,
-    //currentDto
+    currentDto
 } = new UserController()
 
 router.post('/register', registerUser)
@@ -16,7 +16,7 @@ router.post('/register', registerUser)
 
 router.post('/login', loginUser)
 
-// router.get('/current', passportCall('jwt'), currentDto)
+router.get('/current', passportCall('jwt'), currentDto)
 
 
 export default router;

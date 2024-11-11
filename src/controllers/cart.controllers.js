@@ -1,9 +1,12 @@
 import services from "../services/index.js";
-const { cartService } = services;
+const { cartService, productService, ticketService } = services;
+
 
 class CartsController {
     constructor(){
-        this.service = cartService
+        this.service = cartService;
+        this.productService = productService;
+        this.ticketService = ticketService;
     }
 
     createCart = async (req, res) => {
@@ -13,12 +16,12 @@ class CartsController {
         } catch (error) {
             res.status(500).send("Error del servidor");
         }
-    }
+    };
 
     getCart = async (req, res) =>{
         let cartId = req.params.cid;
         try {
-            const cart = await this.service.getCartById(cartId);
+            const cart = await this.service.getCart(cartId);
             res.json(cart);
         } catch (error) {
             res.status(500).send("Error al obtener los productos del carrito");
@@ -33,12 +36,11 @@ class CartsController {
         try {
             const updatedCart = await this.service.createProductToCart(cartId, productId, quantity);
             
-            // Devolver el carrito actualizado junto con su ID
             res.json({
                 status: 'success',
                 message: 'Producto agregado al carrito',
-                cartId: updatedCart._id, // Enviar el ID del carrito
-                cart: updatedCart // Enviar el carrito completo si lo necesitas
+                cartId: updatedCart._id, 
+                cart: updatedCart 
             });
         } catch (error) {
             console.error('Error al agregar producto al carrito:', error);
@@ -122,7 +124,49 @@ class CartsController {
         }
     }
 
+    finalizePurchase = async (req, res) => {
+        const cartId = req.params.cid;
     
+        try {
+            const cart = await this.service.getCart(cartId);
+            if (!cart) {
+                return res.status(404).json({ status: 'error', message: 'Carrito no encontrado' });
+            }
+    
+            let totalAmount = 0;
+            const unprocessedProducts = [];
+    
+            for (const item of cart.products) {
+                const product = await this.productService.getProduct(item.product._id);
+                if (product.stock >= item.quantity) {
+                    await this.productService.updateProducts(product._id, { stock: product.stock - item.quantity });
+                    totalAmount += product.price * item.quantity;
+                } else {
+                    unprocessedProducts.push(item.product._id); 
+                }
+            }
+    
+            if (totalAmount > 0) {
+                const newTicket = await this.ticketService.createTicket({
+                    amount: totalAmount,
+                    purchaser: 'guest' 
+                });
+                console.log('Ticket generado:', newTicket);
+            }
+    
+            await this.service.updateCart(cartId, cart.products.filter(item => unprocessedProducts.includes(item.product._id.toString())));
+    
+            res.json({
+                status: 'success',
+                message: 'Compra finalizada',
+                unprocessedProducts,
+                ticket: totalAmount > 0 ? 'Ticket generado con éxito' : 'No se pudo generar un ticket'
+            });
+        } catch (error) {
+            console.error('Error en la compra:', error);
+            res.status(500).json({ status: 'error', message: 'Error al procesar la compra' });
+        }
+    };
 }
 
 export default CartsController;

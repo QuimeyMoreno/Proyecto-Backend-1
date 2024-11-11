@@ -2,7 +2,6 @@ import { Router } from "express";
 import CartsController from "../../controllers/cart.controllers.js";
 
 
-
 const router = Router();
 const {
     createCart,
@@ -12,7 +11,7 @@ const {
     updateCart,
     updateProductQuantity,
     deleteAllProductsFromCart,
-    finalizePurchase
+    finalizePurchase 
 } = new CartsController()
 
 
@@ -31,5 +30,7 @@ router.put('/:cid/products/:pid', updateProductQuantity);
 router.delete('/:cid', deleteAllProductsFromCart);
 
 router.post('/:cid/purchase', finalizePurchase);
+
+
 
 export default router;

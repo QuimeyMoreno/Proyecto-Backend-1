@@ -23,9 +23,6 @@ class ProductManagerMongo {
         }
     }
     
-    
-
-
     getBy = async (id) =>{
         try {
             const foundProduct = await this.model.findById(id);
@@ -49,7 +46,6 @@ class ProductManagerMongo {
                 return
             }
 
-            //Corroborar que no exista un producto con el mismo code 
             const codeExists = await this.model.findOne({code: code})
 
             if(codeExists){
