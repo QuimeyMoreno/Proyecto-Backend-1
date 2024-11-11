@@ -1,22 +1,22 @@
-// import { connect } from "mongoose"
+import { connect } from 'mongoose';
 
+class MongoSingleton {
+    static #instance;
 
-// class MongoSingleton {
-//     static #instance
-//     constructor(){
-//         connect('mongodb+srv://quimeymoreno00:WPpvuyXGegmP4UBV@cluster0.zzm2z.mongodb.net/ProyectoFinal?retryWrites=true&w=majority&appName=Cluster0')
-//     }
+    constructor() {
+        connect(process.env.MONGO_URL)
+            .then(() => console.log('Base de datos conectada'))
+            .catch(err => console.error('Error al conectar a la base de datos', err));
+    }
 
-//     static getInstance(){
-//         if(this.#instance){
-//             console.log('base de datos ya conectada')
-//             return this.#instance
-//         }
-//         this.#instance = new MongoSingleton()
-//         console.log('base de datos conectada')
-//         return this.#instance
-//     }
-// }
+    static getInstance() {
+        if (this.#instance) {
+            console.log('Base de datos ya conectada');
+            return this.#instance;
+        }
+        this.#instance = new MongoSingleton();
+        return this.#instance;
+    }
+}
 
-// export default MongoSingleton;
-
+export default MongoSingleton;

@@ -1,6 +1,18 @@
-import { connect } from 'mongoose';
+import dotenv from 'dotenv';
+import MongoSingleton from '../utils/mongoSingleton.js';
+
+
+
+dotenv.config();
+
+export const configObject = {
+    port: process.env.PORT,
+    private_key: process.env.PRIVATE_KEY,
+};
+
+console.log('MONGO_URL:', process.env.MONGO_URL);
+console.log('PORT:', process.env.PORT);
 
 export const connectDB = async () => {
-    console.log('Base de datos conectada');
-    return await connect('mongodb+srv://quimeymoreno00:WPpvuyXGegmP4UBV@cluster0.zzm2z.mongodb.net/ProyectoFinal?retryWrites=true&w=majority&appName=Cluster0');
-}
+    return await MongoSingleton.getInstance();
+};

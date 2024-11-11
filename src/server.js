@@ -14,7 +14,7 @@ import initializePassport from './middleware/passport.config.js';
 
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT;
 
 const httpServer = app.listen(PORT, () => {
     console.log('escuchando en el puerto: ', PORT)
@@ -31,6 +31,7 @@ initializePassport();
 app.use(passport.initialize())
 
 connectDB();
+
 
 
 app.engine('handlebars', handlebars.engine({
