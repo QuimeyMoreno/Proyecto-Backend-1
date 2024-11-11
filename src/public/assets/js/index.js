@@ -33,7 +33,7 @@ socket.on('updateProducts', (products) => {
 });
 
 
-const userRole = 'admin'; // Obtén el rol desde tu sistema de autenticación
+const userRole = 'admin'; 
 
 document.getElementById('productForm').addEventListener('submit', function (e) {
     e.preventDefault();

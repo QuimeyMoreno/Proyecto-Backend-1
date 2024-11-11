@@ -1,7 +1,9 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, mongoose } from "mongoose";
+ 
 
 const collectionName = "carts";
 const cartSchema = new Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     products: [
         {
             product: {

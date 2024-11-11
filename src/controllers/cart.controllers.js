@@ -25,18 +25,26 @@ class CartsController {
         }
     }
 
-    createProductToCart = async (req, res) =>{
-        let cartId = req.params.cid; 
-        let productId = req.params.pid; 
-        let quantity = req.body.quantity || 1; 
-    
+    createProductToCart = async (req, res) => {
+        const cartId = req.params.cid; 
+        const productId = req.params.pid; 
+        const quantity = req.body.quantity || 1; 
+        
         try {
-            const update = await this.service.createProductToCart(cartId, productId, quantity);
-            res.json(update);
+            const updatedCart = await this.service.createProductToCart(cartId, productId, quantity);
+            
+            // Devolver el carrito actualizado junto con su ID
+            res.json({
+                status: 'success',
+                message: 'Producto agregado al carrito',
+                cartId: updatedCart._id, // Enviar el ID del carrito
+                cart: updatedCart // Enviar el carrito completo si lo necesitas
+            });
         } catch (error) {
+            console.error('Error al agregar producto al carrito:', error);
             res.status(500).send("Error al agregar un producto");
         }
-    }
+    };
 
     deleteProductFromCart = async (req, res) => {
         let cartId = req.params.cid;

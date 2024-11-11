@@ -1,11 +1,13 @@
 <h1>Carrito de Compras</h1>
 
-{{#each cart.products}}
-<div>
-    <h2>{{this.product.title}}</h2>
-    <p>{{this.product.description}}</p>
-    <p>Price: ${{this.product.price}}</p>
-    <p>Cantidad: {{this.quantity}}</p>
-</div>
-<hr>
-{{/each}}
+<ul id="cart-products-list">
+    {{#each cart.products}}
+        <li id="product-{{this.product._id}}">
+            {{this.product.title}} - Cantidad: {{this.quantity}}
+            <button onclick="removeFromCart('{{../cart._id}}', '{{this.product._id}}')">Eliminar</button>
+        </li>
+    {{/each}}
+</ul>
+
+<a href="/">Volver a la tienda</a>
+<script src="/assets/js/cart.js"></script>
