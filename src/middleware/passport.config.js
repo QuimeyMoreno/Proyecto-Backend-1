@@ -1,25 +1,25 @@
-import passport from 'passport'
-import jwt from 'passport-jwt'
-import { PRIVATE_KEY } from '../utils/jwt.js'
+import passport from 'passport';
+import jwt from 'passport-jwt';
+import dotenv from 'dotenv';
+dotenv.config(); 
 
+const { PRIVATE_KEY } = process.env; 
 
-
-const JWTStrategy = jwt.Strategy
-const ExtractJWT = jwt.ExtractJwt
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
 
 const initializePassport = () => {
-
-    const cookeExtractor = req =>{
+    const cookieExtractor = (req) => {
         let token = null;
-        if (req && req.cookies){
-            token = req.cookies['token']
+        if (req && req.cookies) {
+            token = req.cookies['token'];
         }
         return token;
-    }
-    
+    };
+
     passport.use('jwt', new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromExtractors([cookeExtractor]),
-        secretOrKey: PRIVATE_KEY
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: PRIVATE_KEY, 
     }, async (jwt_payload, done) => {
         try {
             return done(null, jwt_payload);
@@ -27,8 +27,6 @@ const initializePassport = () => {
             return done(error);
         }
     }));
-
-
-}
+};
 
 export default initializePassport;
